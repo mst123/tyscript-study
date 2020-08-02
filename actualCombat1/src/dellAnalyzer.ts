@@ -1,7 +1,6 @@
 import fs from 'fs'
-import path from 'path'
 import cheerio from 'cheerio'
-
+import { Analyzer } from './crowller'
 interface Course {
   title: string;
   count: number;
@@ -14,7 +13,15 @@ interface Content {
   [prop: string]: Course[]
 }
 
-export default class DellAnalyzer{
+export default class DellAnalyzer implements Analyzer{
+  private constructor(){ }
+  private static instance: DellAnalyzer
+  static getInstance(){ // 这个方式也是static！！！！
+    if(!DellAnalyzer.instance){
+      DellAnalyzer.instance = new DellAnalyzer()
+    }
+    return DellAnalyzer.instance
+  }
   private getCourceInfo(html: string ){ //分析页面内容
     const $ = cheerio.load(html);
     const courseItems = $('.course-item');
@@ -27,14 +34,13 @@ export default class DellAnalyzer{
         title,
         count
       })
-      
     })
     return {
       time: new Date().getTime(),
       data: courseInfos
     }
   }
-  generateJsonContent(courseInfo: CourseResult, filePath: string) {//读取文件，提供书写内容
+  private generateJsonContent(courseInfo: CourseResult, filePath: string) {//读取文件，提供书写内容
     let fileContent: Content = {}
     if(fs.existsSync(filePath)){
       fileContent = JSON.parse (fs.readFileSync(filePath, 'utf-8'))
