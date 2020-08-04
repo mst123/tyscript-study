@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node ./src/crowller.ts"
+    "dev123": "ts-node ./src/crowller.ts",
+    "dev:build": "tsc -w",
+    "dev:start": "nodemon node ./dist/crowller.js",
+    "dev": "concurrently npm:dev:*"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +17,16 @@
     "superagent": "^5.3.1"
   },
   "devDependencies": {
-    "@types/superagent": "^4.1.8"
+    "@types/cheerio": "^0.22.14",
+    "@types/superagent": "^4.1.4",
+    "concurrently": "^5.0.0",
+    "nodemon": "^2.0.1",
+    "ts-node": "^8.5.2",
+    "typescript": "^3.7.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "./data"
+    ]
   }
 }
